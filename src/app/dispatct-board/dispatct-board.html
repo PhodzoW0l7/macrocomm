@@ -1,0 +1,94 @@
+<p-toast />
+
+<div class="board-container">
+  <div class="board-header">
+    <h1>Fleet Rescue Dispatch Board</h1>
+    <div class="header-right">
+      <span class="api-status">{{ apiStatus }}</span>
+      <p-button label="New Incident" icon="pi pi-plus" (click)="openNewDialog()" />
+    </div>
+  </div>
+  <div class="summary-grid" *ngIf="summary">
+    <p-card styleClass="metric-card">
+      <div class="metric"><span class="metric-label">Total</span><span class="metric-value">{{ summary.total }}</span></div>
+    </p-card>
+    <p-card styleClass="metric-card">
+      <div class="metric"><span class="metric-label">New</span><span class="metric-value new">{{ summary.new }}</span></div>
+    </p-card>
+    <p-card styleClass="metric-card">
+      <div class="metric"><span class="metric-label">Assigned</span><span class="metric-value assigned">{{ summary.assigned }}</span></div>
+    </p-card>
+    <p-card styleClass="metric-card">
+      <div class="metric"><span class="metric-label">In Progress</span><span class="metric-value inprogress">{{ summary.in_progress }}</span></div>
+    </p-card>
+    <p-card styleClass="metric-card">
+      <div class="metric"><span class="metric-label">Resolved</span><span class="metric-value resolved">{{ summary.resolved }}</span></div>
+    </p-card>
+  </div>
+
+  <p-table
+    [value]="incidents"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 25]"
+    styleClass="p-datatable-sm p-datatable-striped"
+    [tableStyle]="{ 'min-width': '60rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Vehicle</th>
+        <th>Location</th>
+        <th>Issue</th>
+        <th>Severity</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-incident>
+      <tr>
+        <td>{{ incident.vehicle_id }}</td>
+        <td>{{ incident.location }}</td>
+        <td>{{ incident.issue }}</td>
+        <td>
+          <p-tag
+            [value]="incident.severity"
+            [severity]="getSeverityClass(incident.severity)"
+          />
+        </td>
+        <td>
+          <p-tag
+            [value]="incident.status"
+            [severity]="getStatusClass(incident.status)"
+          />
+        </td>
+        <td>{{ incident.priority }}</td>
+        <td>
+          <p-button icon="pi pi-pencil" [text]="true" size="small" />
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" style="text-align: center; color: #888;">
+          No incidents found.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  header="New Incident"
+  [(visible)]="showNewDialog"
+  [modal]="true"
+  [style]="{ width: '40rem' }"
+>
+  <p>Form goes here.</p>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" [text]="true" (click)="showNewDialog = false" />
+    <p-button label="Submit" (click)="showNewDialog = false" />
+  </ng-template>
+</p-dialog>
