@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
+import { BASE_PATH } from './api/generated';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,10 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura
       }
-    })
+    }),
+    {
+      provide:BASE_PATH,
+      useValue:'http://localhost:8000'
+    }
   ]
 };

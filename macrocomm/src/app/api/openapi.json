@@ -33,7 +33,11 @@
             "content": {
               "application/json": {
                 "schema": {
-
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IncidentResponse"
+                  },
+                  "title": "Response Get Incidents Api Incidents Get"
                 }
               }
             }
@@ -59,7 +63,7 @@
             "content": {
               "application/json": {
                 "schema": {
-
+                  "$ref": "#/components/schemas/IncidentResponse"
                 }
               }
             }
@@ -106,7 +110,11 @@
             "content": {
               "application/json": {
                 "schema": {
-
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IncidentResponse"
+                  },
+                  "title": "Response Update Incident Status Api Incidents  Incident Id  Status Patch"
                 }
               }
             }
@@ -159,24 +167,6 @@
           }
         }
       }
-    },
-    "/users": {
-      "get": {
-        "summary": "Get Users",
-        "operationId": "get_users_users_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -193,6 +183,78 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "IncidentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "vehicle_registration": {
+            "type": "string",
+            "title": "Vehicle Registration"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location"
+          },
+          "issue_type": {
+            "type": "string",
+            "title": "Issue Type"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/IncidentSeverity"
+          },
+          "status": {
+            "$ref": "#/components/schemas/IncidentStatus"
+          },
+          "priority_score": {
+            "type": "integer",
+            "title": "Priority Score"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "vehicle_registration",
+          "location",
+          "issue_type",
+          "description",
+          "severity",
+          "status",
+          "priority_score",
+          "created_at"
+        ],
+        "title": "IncidentResponse"
+      },
+      "IncidentSeverity": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ],
+        "title": "IncidentSeverity"
+      },
+      "IncidentStatus": {
+        "type": "string",
+        "enum": [
+          "new",
+          "assigned",
+          "in_progress",
+          "resolved"
+        ],
+        "title": "IncidentStatus"
       },
       "ValidationError": {
         "properties": {

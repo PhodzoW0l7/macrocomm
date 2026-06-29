@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -10,6 +9,9 @@ encoder.ts
 git_push.sh
 index.ts
 model/hTTPValidationError.ts
+model/incidentResponse.ts
+model/incidentSeverity.ts
+model/incidentStatus.ts
 model/locationInner.ts
 model/models.ts
 model/validationError.ts

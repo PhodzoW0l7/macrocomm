@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { DefaultService } from '../api/generated';
+import { DefaultService, IncidentResponse, IncidentSeverity, IncidentStatus } from '../api/generated';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -22,8 +22,8 @@ type TagSeverity = 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contr
   templateUrl: './dispatct-board.html',
   styleUrls: ['./dispatct-board.css'],
 })
-export class DispatctBoard implements OnInit{
-  incidents: any[] = [];
+export class DispatctBoard implements OnInit {
+  incidents: IncidentResponse[] = [];
   summary: any = null;
   showNewDialog = false;
   apiStatus = '';
@@ -31,10 +31,10 @@ export class DispatctBoard implements OnInit{
   constructor(
     private api: DefaultService,
     private messageService: MessageService,
-    private refreshService:RefreshService,
+    private refreshService: RefreshService,
   ) {}
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.checkHealth();
     this.loadIncidents();
     this.loadSummary();
@@ -44,8 +44,6 @@ export class DispatctBoard implements OnInit{
       this.loadSummary();
     });
   }
-
-  
 
   checkHealth(): void {
     this.api.getApihealthApiHealthGet().subscribe({
@@ -60,48 +58,48 @@ export class DispatctBoard implements OnInit{
 
   loadIncidents(): void {
     this.api.getIncidentsApiIncidentsGet().subscribe({
-      next: (data) => {
+      next: (data: IncidentResponse[]) => {
         this.incidents = data ?? [];
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to load incidents. Displaying mock data.',
+          detail: 'Failed to load incidents.',
         });
       },
     });
   }
 
-   loadSummary(): void {
+  loadSummary(): void {
     this.api.getIncidentSummaryApiSummaryGet().subscribe({
       next: (data) => (this.summary = data),
       error: () => console.warn('Summary endpoint unavailable'),
     });
   }
 
-  getSeverityClass(severity: string): TagSeverity {
-  const map: Record<string, TagSeverity> = {
-    low: 'success',
-    medium: 'warn',
-    high: 'danger',
-    critical: 'contrast',
-  };
-  return map[severity?.toLowerCase()] ?? 'info';
-}
-
-getStatusClass(status: string): TagSeverity {
-  const map: Record<string, TagSeverity> = {
-    new: 'info',
-    assigned: 'secondary',
-    in_progress: 'warn', 
-    resolved: 'success',
-  };
-  return map[status?.toLowerCase()] ?? 'secondary';
-}
-
-  openNewDialog(): void {
-    this.showNewDialog = true;
+  // Refactored to accept strict generated types instead of generic strings
+  getSeverityClass(severity: IncidentSeverity): TagSeverity {
+    const map: Record<IncidentSeverity, TagSeverity> = {
+      [IncidentSeverity.Low]: 'success',
+      [IncidentSeverity.Medium]: 'warn',
+      [IncidentSeverity.High]: 'danger',
+      [IncidentSeverity.Critical]: 'contrast',
+    };
+    return map[severity] ?? 'info';
   }
 
+  getStatusClass(status: IncidentStatus): TagSeverity {
+    const map: Record<IncidentStatus, TagSeverity> = {
+      [IncidentStatus.New]: 'info',
+      [IncidentStatus.Assigned]: 'secondary',
+      [IncidentStatus.InProgress]: 'warn', 
+      [IncidentStatus.Resolved]: 'success',
+    };
+    return map[status] ?? 'secondary';
+  }
+
+  openNewDialog(): void {
+    this.showNewDialog = true; 
+  }
 }

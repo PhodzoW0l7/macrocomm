@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from backend.schemas.incidents import IncidentSeverity, IncidentStatus
+from schemas.incidents import IncidentSeverity, IncidentStatus
 
 class IncidentResponse(BaseModel):
     id:int

@@ -8,6 +8,7 @@
       <p-button label="New Incident" icon="pi pi-plus" (click)="openNewDialog()" />
     </div>
   </div>
+  
   <div class="summary-grid" *ngIf="summary">
     <p-card styleClass="metric-card">
       <div class="metric"><span class="metric-label">Total</span><span class="metric-value">{{ summary.total }}</span></div>
@@ -48,9 +49,11 @@
 
     <ng-template pTemplate="body" let-incident>
       <tr>
-        <td>{{ incident.vehicle_id }}</td>
+        <!-- 1. Changed vehicle_id to vehicle_registration -->
+        <td>{{ incident.vehicle_registration }}</td>
         <td>{{ incident.location }}</td>
-        <td>{{ incident.issue }}</td>
+        <!-- 2. Changed issue to issue_type -->
+        <td>{{ incident.issue_type }}</td>
         <td>
           <p-tag
             [value]="incident.severity"
@@ -63,7 +66,8 @@
             [severity]="getStatusClass(incident.status)"
           />
         </td>
-        <td>{{ incident.priority }}</td>
+        <!-- 3. Changed priority to priority_score -->
+        <td>{{ incident.priority_score }}</td>
         <td>
           <p-button icon="pi pi-pencil" [text]="true" size="small" />
         </td>
